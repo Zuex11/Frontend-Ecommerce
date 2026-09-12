@@ -1,0 +1,72 @@
+<main>
+  <section class="home-hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <h1>Gear up for the streets</h1>
+        <p class="text-muted">
+          Fresh drops every week. Cash on delivery, no signup fees, no nonsense.
+        </p>
+        <a [routerLink]="['/products']" class="btn btn-primary">Shop new drop</a>
+      </div>
+      <div class="hero-images">
+        <div class="product-image">
+          @if (myArrivals[0]) {
+          <img [src]="staticURL + myArrivals[0].imgURL[0]" [alt]="myArrivals[0].name" />
+          }
+        </div>
+        <div class="product-image">
+          @if (myArrivals[1]) {
+          <img [src]="staticURL + myArrivals[1].imgURL[0]" [alt]="myArrivals[1].name" />
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap page-body">
+    <section class="home-section">
+      <div class="section-title"><h2>Shop by category</h2></div>
+      @for (category of categories; track category._id) {
+      <div class="categories-column">
+        <a
+          [routerLink]="['/products']"
+          [queryParams]="{ category: category.slug }"
+          class="card category-card"
+        >
+          <div>{{ category.name }}</div>
+        </a>
+      </div>
+      } @empty {
+      <div class="empty-state"><h3>No categories yet</h3></div>
+      }
+    </section>
+
+    <section class="home-section">
+      <div class="section-title">
+        <h2>Top sales</h2>
+        <a [routerLink]="['/products']" [queryParams]="{ isTopSale: 'true' }">View all</a>
+      </div>
+      <div class="product-grid">
+        @for (product of myTopSales; track product._id) {
+          <app-product [product]="product" />
+        } @empty {
+          <div class="empty-state"><h3>No top sales yet</h3></div>
+        }
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <h2>New arrivals</h2>
+        <a [routerLink]="['/products']" [queryParams]="{ isNewArrival: 'true' }">View all</a>
+      </div>
+      <div class="product-grid">
+        @for (product of allNewArrivals; track product._id) {
+          <app-product [product]="product" />
+        } @empty {
+          <div class="empty-state"><h3>No new arrivals yet</h3></div>
+        }
+      </div>
+    </section>
+  </div>
+</main>

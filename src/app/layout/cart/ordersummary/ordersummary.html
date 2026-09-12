@@ -1,0 +1,7 @@
+<aside class="card order-summary">
+  <h3 style="font-size:15px; margin-bottom:16px;">Order summary</h3>
+  <div class="summary-row"><span class="text-muted">Subtotal ({{ itemCount }} items)</span><span>LE {{ subtotal }}</span></div>
+  <div class="summary-row total"><span>Total</span><span>LE {{ subtotal }}</span></div>
+  <button type="button" class="btn btn-primary btn-block" style="margin-top:18px;" (click)="checkout()">Checkout</button>
+  <p class="text-muted" style="font-size:12px; margin-top:12px;">Cash on delivery only. Items marked as price-changed need confirmation before they're included.</p>
+</aside>

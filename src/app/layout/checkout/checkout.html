@@ -1,0 +1,105 @@
+<main class="wrap page-body">
+  @if (placedOrder) {
+  <div class="empty-state">
+    <h3>Order placed!</h3>
+    <p class="text-muted">Total LE {{ placedOrder.totalPrice }} · cash on delivery.</p>
+    <a routerLink="/" class="btn btn-primary" style="margin-top:16px;">Continue shopping</a>
+  </div>
+  } @else {
+  <h1 style="font-size:24px; margin-bottom:24px;">Checkout</h1>
+
+  @if (hasChangedItems) {
+  <div class="price-changed-banner">
+    <i class="ti ti-alert-triangle"></i>
+    <span
+      >Some items in your cart changed price.
+      <a routerLink="/cart">Go back to your cart</a> to confirm them before checking out.</span
+    >
+  </div>
+  }
+
+  <div class="cart-layout">
+    <div>
+      <div class="account-section-title">
+        <h2 style="font-size:16px;">Delivery address</h2>
+        <a routerLink="/profile" fragment="addresses" style="font-size:13px; color:var(--cyan);">Manage addresses</a>
+      </div>
+
+      @if (addresses.length === 0) {
+      <div class="empty-state">
+        <h3>No saved addresses</h3>
+        <p class="text-muted">Add a delivery address to your profile before checking out.</p>
+        <a routerLink="/profile" fragment="addresses" class="btn btn-sm btn-secondary" style="margin-top:16px;">Add address</a>
+      </div>
+      } @else {
+      <div class="address-list">
+        @for (address of addresses; track address._id) {
+        <div
+          class="address-card"
+          [class.selected]="selectedAddressId === address._id"
+          (click)="selectedAddressId = address._id"
+        >
+          <div class="address-radio"></div>
+          <div>
+            <div class="address-title-row">
+              <span class="address-title">{{ address.title }}</span>
+              @if (address.isDefault) {
+              <span class="address-default-tag">Default</span>
+              }
+            </div>
+            <div class="address-lines">
+              {{ address.fullName }} · {{ address.phoneNumber }}<br />
+              {{ address.addressLine1 }}<br />
+              {{ address.city }}, {{ address.governorate }} — {{ address.country }}
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+      }
+
+      <hr class="divider" />
+
+      <div class="account-section-title">
+        <h2 style="font-size:16px;">Order items</h2>
+      </div>
+      @for (item of readyItems; track item._id) {
+      <div class="cart-item" style="grid-template-columns: 60px 1fr auto;">
+        <div class="product-image cart-item-thumb">
+          <img [src]="staticURL + item.productId.imgURL[0]" [alt]="item.productId.name" />
+        </div>
+        <div class="cart-item-name">{{ item.productId.name }} <span class="text-muted">× {{ item.quantity }}</span></div>
+        <div class="cart-item-line">LE {{ item.price * item.quantity }}</div>
+      </div>
+      }
+    </div>
+
+    <aside class="card order-summary">
+      <h3 style="font-size:15px; margin-bottom:16px;">Order summary</h3>
+      <div class="summary-row"><span class="text-muted">Subtotal ({{ readyItems.length }} items)</span><span>LE {{ subtotal }}</span></div>
+      <div class="summary-row total"><span>Total</span><span>LE {{ subtotal }}</span></div>
+
+      <div class="form-group" style="margin-top:18px;">
+        <label>Payment method</label>
+        <div class="card" style="padding:12px 14px; display:flex; align-items:center; gap:10px; border-color: var(--cyan);">
+          <i class="ti ti-cash" style="color:var(--cyan);"></i>
+          <span style="font-size:13px;">Cash on delivery</span>
+        </div>
+      </div>
+
+      @if (myError) {
+      <p class="auth-error">{{ myError }}</p>
+      }
+
+      <button
+        type="button"
+        class="btn btn-primary btn-block"
+        [disabled]="!selectedAddressId || readyItems.length === 0 || hasChangedItems || placing"
+        (click)="placeOrder()"
+      >
+        {{ placing ? 'Placing order...' : 'Place order' }}
+      </button>
+    </aside>
+  </div>
+  }
+</main>

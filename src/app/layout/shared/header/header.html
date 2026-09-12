@@ -1,0 +1,19 @@
+<header class="navbar">
+  <div class="wrap">
+    <a routerLink="/" class="logo">STYLE_</a>
+    <nav class="nav-actions">
+      @if (isLoggedIn) { @if (isAdmin) {
+      <a routerLink="/admin"><i class="ti ti-shield-lock"></i> Admin</a>
+      }
+      <a routerLink="/orders"><i class="ti ti-package"></i> Orders</a>
+      <a routerLink="/profile"><i class="ti ti-user"></i> Profile</a>
+      <a routerLink="/cart"><i class="ti ti-shopping-cart"></i> Cart</a>
+      <a (click)="logout()"><i class="ti ti-logout"></i> Log out</a>
+      } @else {
+      <a routerLink="/cart"><i class="ti ti-shopping-cart"></i> Cart</a>
+      <a routerLink="/login"><i class="ti ti-login"></i> Log in</a>
+      <a routerLink="/signup">Sign up</a>
+      }
+    </nav>
+  </div>
+</header>

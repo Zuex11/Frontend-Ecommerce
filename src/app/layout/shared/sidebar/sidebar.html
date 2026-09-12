@@ -1,0 +1,33 @@
+  <aside class="sidebar">
+    @if (subcategories.length > 0) {
+    <h3>Subcategory</h3>
+    @for (sub of subcategories; track sub._id) {
+    <a
+      [routerLink]="['/products']"
+      routerLinkActive="active"
+      [queryParams]="{ category: categorySlug, subcategory: sub.slug }"
+      queryParamsHandling="merge"
+    >
+      {{ sub.name }}
+    </a>
+    }
+    }
+
+    <h3 class="sidebar-section-spacing">Availability</h3>
+    <a
+      [routerLink]="['/products']"
+      [class.active]="isTopSale"
+      [queryParams]="isTopSale ? { isTopSale: null } : { isTopSale: 'true' }"
+      queryParamsHandling="merge"
+    >
+      Top sales
+    </a>
+    <a
+      [routerLink]="['/products']"
+      [class.active]="isNewArrival"
+      [queryParams]="isNewArrival ? { isNewArrival: null } : { isNewArrival: 'true' }"
+      queryParamsHandling="merge"
+    >
+      New arrivals
+    </a>
+  </aside>

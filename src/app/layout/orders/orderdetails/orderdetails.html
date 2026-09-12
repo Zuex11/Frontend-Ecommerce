@@ -1,0 +1,79 @@
+<main class="wrap page-body" style="max-width:800px;">
+  @if (myOrder) {
+  <a routerLink="/orders" class="text-muted" style="font-size:13px;">&larr; Back to orders</a>
+
+  <div style="display:flex; justify-content:space-between; align-items:center; margin:20px 0 28px;">
+    <div>
+      <h1 style="font-size:22px;">Order #{{ myOrder._id }}</h1>
+      <p class="text-muted" style="font-size:13px; margin-top:4px;">Placed on {{ myOrder.orderedAt | date: 'MMM d, y' }}</p>
+    </div>
+    @if (isTerminalStatus) {
+    <span class="badge" style="background:var(--pink); color:#fff; font-size:12px; padding:8px 16px;">{{ myOrder.status }}</span>
+    } @else {
+    <span class="badge badge-status" style="font-size:12px; padding:8px 16px;">{{ myOrder.status }}</span>
+    }
+  </div>
+
+  <div class="card" style="margin-bottom:20px;">
+    <h3 style="font-size:14px; margin-bottom:16px;">Items</h3>
+    @for (product of myOrder.products; track product.productId._id) {
+    <div style="display:flex; gap:14px; padding:14px 0; border-bottom:1px solid var(--border);">
+      <div class="product-image" style="width:64px; height:80px; flex-shrink:0;">
+        <img [src]="staticURL + product.productId.imgURL[0]" [alt]="product.productId.name" />
+      </div>
+      <div style="flex:1;">
+        <div class="product-name">{{ product.productId.name }}</div>
+        <div class="text-muted" style="font-size:12px;">Qty: {{ product.quantity }} · LE {{ product.priceAtOrderTime }} each</div>
+      </div>
+      <div class="text-yellow" style="font-family:var(--font-head); font-weight:600;">
+        LE {{ product.priceAtOrderTime * product.quantity }}
+      </div>
+    </div>
+    }
+    <div class="divider"></div>
+    <div style="display:flex; justify-content:space-between; font-size:16px;">
+      <span>Total</span>
+      <span class="text-yellow" style="font-family:var(--font-head); font-weight:600;">LE {{ myOrder.totalPrice }}</span>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:20px;">
+    <h3 style="font-size:14px; margin-bottom:12px;">Delivery address</h3>
+    <p style="font-size:14px;">{{ myOrder.address.title }}</p>
+    <p class="text-muted" style="font-size:13px; margin-top:4px;">
+      {{ myOrder.address.fullName }} · {{ myOrder.address.phoneNumber }}<br />
+      {{ myOrder.address.addressLine1 }}<br />
+      {{ myOrder.address.city }}, {{ myOrder.address.governorate }} — {{ myOrder.address.country }}
+    </p>
+  </div>
+
+  @if (!isTerminalStatus) {
+  <div class="card">
+    <h3 style="font-size:14px; margin-bottom:12px;">Order status</h3>
+    <div style="display:flex; gap:6px;">
+      @for (step of statusSteps; track step; let i = $index) {
+      <div style="flex:1; height:4px;" [style.background]="i <= currentStepIndex ? 'var(--yellow)' : 'var(--border-strong)'"></div>
+      }
+    </div>
+    <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-muted); margin-top:8px; text-transform:uppercase;">
+      @for (step of statusSteps; track step) {
+      <span>{{ step }}</span>
+      }
+    </div>
+  </div>
+  }
+
+  @if (isCancellable) {
+  <button class="btn btn-danger" style="margin-top:24px;" [disabled]="cancelling" (click)="cancelOrder()">
+    {{ cancelling ? 'Cancelling...' : 'Cancel order' }}
+  </button>
+  }
+  } @else if (notFound) {
+  <div class="empty-state">
+    <h3>Order not found</h3>
+    <a routerLink="/orders" class="btn btn-primary" style="margin-top:16px;">Back to orders</a>
+  </div>
+  } @else {
+  <div class="empty-state"><h3>Loading...</h3></div>
+  }
+</main>

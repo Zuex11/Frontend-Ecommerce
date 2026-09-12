@@ -1,0 +1,42 @@
+<main class="wrap page-body">
+  <h1 style="font-size: 24px; margin-bottom: 24px">Your cart</h1>
+
+  <div class="cart-layout">
+    <div>
+      @if (readyItems.length > 0) {
+      <div class="cart-section-label">Ready to check out</div>
+      } @for (item of readyItems; track item._id) {
+      <app-cartitem
+        [item]="item"
+        (increaseQty)="increaseQty($event)"
+        (decreaseQty)="decreaseQty($event)"
+        (removeItem)="removeItem($event)"
+      />
+      } @if (changedItems.length > 0) {
+      <div class="price-changed-banner">
+        <i class="ti ti-alert-triangle"></i>
+        <span
+          >The price changed on the items below since you added them. Confirm before they can be
+          checked out.</span
+        >
+      </div>
+      } @for (item of changedItems; track item._id) {
+      <app-cartitem
+        [item]="item"
+        (increaseQty)="increaseQty($event)"
+        (decreaseQty)="decreaseQty($event)"
+        (removeItem)="removeItem($event)"
+        (confirmPrice)="confirmPrice($event)"
+      />
+      } @if (readyItems.length === 0 && changedItems.length === 0) {
+      <div class="empty-state">
+        <h3>Your cart is empty</h3>
+      </div>
+      }
+    </div>
+
+    @if (myCart) {
+    <app-ordersummary [items]="readyItems" />
+    }
+  </div>
+</main>

@@ -1,0 +1,19 @@
+<main class="wrap page-body">
+  <div class="sidebar-layout">
+<app-sidebar [categorySlug]="filters.category ?? null"></app-sidebar>    <div>
+      <div class="section-title">
+        <h2>All products</h2>
+      </div>
+      <div class="product-grid">
+        @for (product of myProducts; track product._id) {
+          <app-product [product]="product" />
+        } @empty {
+          <div class="empty-state">
+            <h3>No products found</h3>
+            <p>Check back soon — new drops land weekly.</p>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</main>

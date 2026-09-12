@@ -1,0 +1,178 @@
+<main class="wrap page-body">
+  @if (myUser) {
+  <div class="account-layout">
+    <aside>
+      <nav class="account-nav">
+        <a href="#profile">Profile info</a>
+        <a href="#addresses">Addresses</a>
+      </nav>
+    </aside>
+
+    <div>
+      <section class="account-section" id="profile">
+        <div class="account-section-title">
+          <h2>Profile info</h2>
+          @if (!editingProfile) {
+          <button type="button" class="btn btn-sm btn-secondary" (click)="startEditProfile()">Edit</button>
+          }
+        </div>
+
+        @if (!editingProfile) {
+        <div class="card">
+          <div class="info-grid">
+            <div class="info-field"><div class="label">First name</div><div class="value">{{ myUser.firstName }}</div></div>
+            <div class="info-field"><div class="label">Last name</div><div class="value">{{ myUser.lastName }}</div></div>
+            <div class="info-field"><div class="label">Email</div><div class="value">{{ myUser.email }}</div></div>
+            <div class="info-field"><div class="label">Gender</div><div class="value">{{ myUser.gender }}</div></div>
+          </div>
+        </div>
+        } @else {
+        <form #profileForm="ngForm" (ngSubmit)="saveProfile(profileForm)" class="card">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="firstName">First name</label>
+              <input type="text" id="firstName" name="firstName" [(ngModel)]="firstName" required />
+            </div>
+            <div class="form-group">
+              <label for="lastName">Last name</label>
+              <input type="text" id="lastName" name="lastName" [(ngModel)]="lastName" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="gender">Gender</label>
+            <select id="gender" name="gender" [(ngModel)]="gender" required>
+              <option value="" disabled>Select gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </div>
+          @if (profileError) {
+          <p class="auth-error">{{ profileError }}</p>
+          }
+          <div style="display:flex; gap:10px;">
+            <button type="submit" class="btn btn-primary btn-sm">Save</button>
+            <button type="button" class="btn btn-sm btn-secondary" (click)="cancelEditProfile()">Cancel</button>
+          </div>
+        </form>
+        }
+      </section>
+
+      <section class="account-section" id="addresses">
+        <div class="account-section-title">
+          <h2>Addresses</h2>
+          @if (myUser.addresses.length < 5) {
+          <button type="button" class="btn btn-sm btn-secondary" (click)="startAddAddress()">+ Add address</button>
+          }
+        </div>
+
+        <div class="address-list">
+          @for (address of myUser.addresses; track address._id) {
+          <div class="address-card" style="cursor:default;">
+            <div style="flex:1;">
+              <div class="address-title-row">
+                <span class="address-title">{{ address.title }}</span>
+                @if (address.isDefault) {
+                <span class="address-default-tag">Default</span>
+                }
+              </div>
+              <div class="address-lines">
+                {{ address.fullName }} · {{ address.phoneNumber }}<br />
+                {{ address.addressLine1 }}
+                @if (address.addressLine2) { <span>, {{ address.addressLine2 }}</span> }
+                <br />
+                {{ address.city }}, {{ address.governorate }} — {{ address.country }}
+              </div>
+              <div class="address-actions">
+                <button type="button" class="btn btn-sm btn-secondary" (click)="startEditAddress(address)">
+                  Edit
+                </button>
+                <button type="button" class="btn btn-sm btn-danger" (click)="deleteAddress(address._id)">
+                  Delete
+                </button>
+              </div>
+            </div>
+            <label class="switch" title="Set as default">
+              <input
+                type="checkbox"
+                [checked]="address.isDefault"
+                [disabled]="address.isDefault"
+                (change)="setDefaultAddress(address._id)"
+              />
+              <span class="switch-track"></span>
+            </label>
+          </div>
+          } @empty {
+          <p class="text-muted">No addresses saved yet.</p>
+          }
+        </div>
+
+        @if (editingAddress) {
+        <form #addressNgForm="ngForm" (ngSubmit)="saveAddress(addressNgForm)" class="card" style="margin-top:16px;">
+          <h3 style="font-size:14px; margin-bottom:16px;">
+            {{ editingAddress === 'new' ? 'Add address' : 'Edit address' }}
+          </h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="title">Label</label>
+              <input type="text" id="title" name="title" [(ngModel)]="addressForm.title" required placeholder="Home, Work..." />
+            </div>
+            <div class="form-group">
+              <label for="fullName">Full name</label>
+              <input type="text" id="fullName" name="fullName" [(ngModel)]="addressForm.fullName" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="phoneNumber">Phone number</label>
+              <input type="tel" id="phoneNumber" name="phoneNumber" [(ngModel)]="addressForm.phoneNumber" required />
+            </div>
+            <div class="form-group">
+              <label for="country">Country</label>
+              <input type="text" id="country" name="country" [(ngModel)]="addressForm.country" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="governorate">Governorate</label>
+              <input type="text" id="governorate" name="governorate" [(ngModel)]="addressForm.governorate" required />
+            </div>
+            <div class="form-group">
+              <label for="city">City</label>
+              <input type="text" id="city" name="city" [(ngModel)]="addressForm.city" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="addressLine1">Address line 1</label>
+              <input type="text" id="addressLine1" name="addressLine1" [(ngModel)]="addressForm.addressLine1" required />
+            </div>
+            <div class="form-group">
+              <label for="addressLine2">Address line 2 (optional)</label>
+              <input type="text" id="addressLine2" name="addressLine2" [(ngModel)]="addressForm.addressLine2" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="postalCode">Postal code</label>
+              <input type="text" id="postalCode" name="postalCode" [(ngModel)]="addressForm.postalCode" required />
+            </div>
+          </div>
+
+          @if (addressError) {
+          <p class="auth-error">{{ addressError }}</p>
+          }
+          <div style="display:flex; gap:10px;">
+            <button type="submit" class="btn btn-primary btn-sm">Save address</button>
+            <button type="button" class="btn btn-sm btn-secondary" (click)="cancelEditAddress()">Cancel</button>
+          </div>
+        </form>
+        }
+      </section>
+    </div>
+  </div>
+  } @else {
+  <div class="empty-state">
+    <h3>Loading...</h3>
+  </div>
+  }
+</main>

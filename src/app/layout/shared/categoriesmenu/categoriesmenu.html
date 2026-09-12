@@ -1,0 +1,27 @@
+<div class="categories-menu">
+  <button type="button" class="categories-trigger" (click)="toggle()">Categories</button>
+
+  @if (isOpen) {
+  <div class="categories-panel" (click)="close()">
+    @for (group of groups; track group.category._id) {
+    <div class="categories-column">
+      <a
+        [routerLink]="['/products']"
+        [queryParams]="{ category: group.category.slug }"
+        class="categories-column-title"
+      >
+        {{ group.category.name }}
+      </a>
+      @for (sub of group.subcategories; track sub._id) {
+      <a
+        [routerLink]="['/products']"
+        [queryParams]="{ category: group.category.slug, subcategory: sub.slug }"
+      >
+        {{ sub.name }}
+      </a>
+      }
+    </div>
+    }
+  </div>
+  }
+</div>

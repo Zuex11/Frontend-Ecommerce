@@ -1,0 +1,16 @@
+<a class="product-card" [routerLink]="['/products', product.slug]">
+  <div class="product-image" [style.opacity]="product.stock === 0 ? 0.5 : 1">
+    <img [src]="staticURL + product.imgURL[0]" [alt]="product.name" />
+    @if (product.stock === 0) {
+      <span class="badge badge-out">Out of stock</span>
+    } @else if (product.stock <= 3) {
+      <span class="badge badge-low-stock">Only {{ product.stock }} left</span>
+    } @else if (product.isNewArrival) {
+      <span class="badge badge-new">New</span>
+    }
+  </div>
+  <div class="product-info">
+    <div class="product-name">{{ product.name }}</div>
+    <div class="product-price">LE {{ product.price }}</div>
+  </div>
+</a>

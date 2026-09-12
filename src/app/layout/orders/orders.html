@@ -1,0 +1,31 @@
+<main class="wrap page-body" style="max-width:800px;">
+  <h1 style="font-size:22px; margin-bottom:24px;">Your orders</h1>
+
+  @for (order of myOrders; track order._id) {
+  <a
+    [routerLink]="['/orders', order._id]"
+    class="card"
+    style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;"
+  >
+    <div>
+      <div style="font-size:14px;">Order #{{ order._id }}</div>
+      <div class="text-muted" style="font-size:12px; margin-top:4px;">
+        Placed {{ order.orderedAt | date: 'MMM d, y' }} · {{ itemCount(order) }} item{{ itemCount(order) === 1 ? '' : 's' }}
+      </div>
+    </div>
+    <div style="text-align:right;">
+      <div class="text-yellow" style="font-family:var(--font-head); font-weight:600;">LE {{ order.totalPrice }}</div>
+      @if (isTerminalStatus(order.status)) {
+      <span class="badge" style="background:var(--pink); color:#fff; margin-top:6px;">{{ order.status }}</span>
+      } @else {
+      <span class="badge badge-status" style="margin-top:6px;">{{ order.status }}</span>
+      }
+    </div>
+  </a>
+  } @empty {
+  <div class="empty-state">
+    <h3>No orders yet</h3>
+    <a routerLink="/products" class="btn btn-primary" style="margin-top:16px;">Start shopping</a>
+  </div>
+  }
+</main>

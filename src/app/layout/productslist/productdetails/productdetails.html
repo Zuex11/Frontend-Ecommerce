@@ -1,0 +1,94 @@
+@if (myProduct){
+<main class="wrap page-body">
+  <div class="pd-layout">
+    <div>
+      <div class="product-image pd-gallery-main">
+        <img [src]="staticURL + myProduct.imgURL[selectedImage]" [alt]="myProduct.name" />
+        @if (myProduct.isNewArrival) {
+        <span class="badge badge-new">New</span>
+        }
+      </div>
+      <div class="pd-thumbs">
+        @for (image of myProduct.imgURL; track $index) {
+        <div
+          class="product-image pd-thumb"
+          [class.active]="$index === selectedImage"
+          (click)="selectedImage = $index"
+        >
+          <img [src]="staticURL + image" [alt]="myProduct.name" />
+        </div>
+        }
+      </div>
+    </div>
+    <div>
+      <h1 class="pd-name">{{myProduct.name}}</h1>
+      <div class="pd-price">LE {{myProduct.price}}</div>
+
+      <div class="stock-line">
+        @if (myProduct.stock === 0) {
+        <span class="stock-dot out"></span>
+        <span>Out of stock</span>
+        } @else if (myProduct.stock <= 3) {
+        <span class="stock-dot low"></span>
+        <span>Only {{ myProduct.stock }} left in stock</span>
+        } @else {
+        <span class="stock-dot ok"></span>
+        <span>In stock</span>
+        }
+      </div>
+      <div class="pd-add-row">
+        <div class="qty-stepper">
+          <button type="button" (click)="decreaseQty()" [disabled]="quantity <= 1">−</button>
+          <input type="text" [value]="quantity" readonly />
+          <button
+            type="button"
+            (click)="increaseQty()"
+            [disabled]="!canAddMore || quantity >= myProduct.stock - qtyInCart"
+          >
+            +
+          </button>
+        </div>
+        <button type="button" class="btn btn-primary" [disabled]="!canAddMore" (click)="addToCart()">
+          Add to cart
+        </button>
+      </div>
+      @if (cartError) {
+      <p class="auth-error">{{ cartError }}</p>
+      } @else if (cartMessage) {
+      <p class="pd-cart-note">{{ cartMessage }}</p>
+      } @if (canAddMore && qtyInCart > 0) {
+      <p class="pd-cart-note">{{ qtyInCart }} already in your cart</p>
+      }
+
+      <hr class="divider" />
+
+      <div class="pd-desc">
+        <h3>Description</h3>
+        <p>{{myProduct.desc}}</p>
+      </div>
+    </div>
+  </div>
+  @if (relatedProducts && relatedProducts.length > 0) {
+  <section class="pd-related">
+    <div class="section-title"><h2>You might also like</h2></div>
+    <div class="product-grid">
+      @for (product of relatedProducts; track product._id) {
+      <app-product [product]="product" />
+      }
+    </div>
+  </section>
+  }
+</main>
+} @else if (loadError) {
+<div class="empty-state">
+  <h3>Product not found</h3>
+  <p class="text-muted">This product doesn't exist or is no longer available.</p>
+  <a routerLink="/products" class="btn btn-primary" style="margin-top: 16px"
+    >Back to products</a
+  >
+</div>
+} @else{
+<div class="empty-state">
+  <h3>Loading...</h3>
+</div>
+}

@@ -1,0 +1,29 @@
+<div class="cart-item" [class.changed]="item.isPriceChanged">
+  <div class="product-image cart-item-thumb">
+    <img [src]="staticURL + item.productId.imgURL[0]" [alt]="item.productId.name" />
+  </div>
+  <div>
+    <div class="cart-item-name">{{ item.productId.name }}</div>
+    @if (item.isPriceChanged) {
+    <div class="price-change-note">
+      Price changed: LE {{ item.price }} → LE {{ item.productId.price }}
+    </div>
+    }
+  </div>
+  <div class="qty-stepper">
+    <button type="button" (click)="onDecrease()" [disabled]="item.quantity <= 1">−</button>
+    <input type="text" [value]="item.quantity" readonly />
+    <button type="button" (click)="onIncrease()" [disabled]="item.quantity >= item.productId.stock">
+      +
+    </button>
+  </div>
+  <div class="cart-item-price">LE {{ item.price * item.quantity }}</div>
+  <button type="button" class="cart-remove" (click)="onRemove()">
+    <i class="ti ti-trash"></i>
+  </button>
+  @if (item.isPriceChanged) {
+  <button type="button" class="btn btn-sm btn-secondary" (click)="onConfirm()">
+    Confirm new price
+  </button>
+  }
+</div>
