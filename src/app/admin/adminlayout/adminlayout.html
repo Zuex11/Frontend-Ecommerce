@@ -1,0 +1,18 @@
+<header class="navbar">
+  <div class="wrap">
+    <a routerLink="/admin" class="logo"
+      >STYLE_<span class="text-cyan" style="font-size: 11px; margin-left: 6px; letter-spacing: 1px"
+        >ADMIN</span
+      ></a
+    >
+    <nav class="nav-actions" style="margin-left: auto">
+      <a routerLink="/admin" routerLinkActive="text-yellow" [routerLinkActiveOptions]="{ exact: true }">Dashboard</a>
+      <a routerLink="/admin/products" routerLinkActive="text-yellow">Products</a>
+      <a routerLink="/admin/categories" routerLinkActive="text-yellow">Categories</a>
+      <a routerLink="/admin/orders" routerLinkActive="text-yellow">Orders</a>
+      <a routerLink="/admin/testimonials" routerLinkActive="text-yellow">Testimonials</a>
+    </nav>
+  </div>
+</header>
+
+<router-outlet />

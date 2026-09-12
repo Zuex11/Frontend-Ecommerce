@@ -1,0 +1,11 @@
+<div class="card">
+  <h3 style="font-size: 14px; margin-bottom: 16px">{{ title }}</h3>
+  <table>
+    @for (item of items; track $index; let i = $index) {
+    <tr>
+      <td>{{ i + 1 }}. {{ item.name }}</td>
+      <td class="text-yellow" style="text-align: right">{{ item.value }}</td>
+    </tr>
+    }
+  </table>
+</div>

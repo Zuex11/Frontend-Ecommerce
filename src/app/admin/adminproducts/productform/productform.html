@@ -1,0 +1,91 @@
+<div class="card" style="max-width: 600px">
+  <h3 style="font-size: 14px; margin-bottom: 20px">{{ editing ? 'Edit product' : 'Add / edit product' }}</h3>
+
+  <form #myForm="ngForm" (ngSubmit)="onSubmit(myForm)">
+    <div class="form-group">
+      <label for="p-name">Product name</label>
+      <input type="text" id="p-name" name="name" [(ngModel)]="name" required placeholder="e.g. Graphic street tee" />
+    </div>
+
+    <div class="form-group">
+      <label for="p-desc">Description</label>
+      <textarea id="p-desc" name="desc" [(ngModel)]="desc" rows="3" required placeholder="Short product description"></textarea>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="p-price">Price</label>
+        <input type="number" id="p-price" name="price" [(ngModel)]="price" required placeholder="0.00" />
+      </div>
+      <div class="form-group">
+        <label for="p-stock">Stock</label>
+        <input type="number" id="p-stock" name="stock" [(ngModel)]="stock" required placeholder="0" />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="p-slug">Slug</label>
+      <input type="text" id="p-slug" name="slug" [(ngModel)]="slug" required placeholder="e.g. graphic-street-tee" />
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="p-category">Category</label>
+        <select id="p-category" name="categoryId" [(ngModel)]="categoryId" (change)="onCategoryChange()" required>
+          <option value="" disabled>Select category</option>
+          @for (category of categories; track category._id) {
+          <option [value]="category._id">{{ category.name }}</option>
+          }
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="p-subcategory">Subcategory</label>
+        <select id="p-subcategory" name="subcategoryId" [(ngModel)]="subcategoryId" required>
+          <option value="" disabled>Select subcategory</option>
+          @for (subcategory of mySubcategories; track subcategory._id) {
+          <option [value]="subcategory._id">{{ subcategory.name }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="p-image">Images @if (editing) {<span class="text-muted">(up to 4 — leave empty to keep current)</span>} @else {<span class="text-muted">(up to 4)</span>}</label>
+      <input type="file" id="p-image" #imageInput name="imgURL" accept="image/*" multiple (change)="onImageChange($event)" [required]="!editing" />
+      @if (editing) {
+      <div class="pd-thumbs" style="margin-top: 12px">
+        @for (image of editing.imgURL; track $index) {
+        <div class="product-image pd-thumb">
+          <img [src]="staticURL + image" [alt]="editing.name" />
+        </div>
+        }
+      </div>
+      }
+    </div>
+
+    <div style="display: flex; gap: 24px; align-items: center; margin: 18px 0">
+      <label class="switch"
+        ><input type="checkbox" name="isActive" [(ngModel)]="isActive" /><span
+          class="switch-track"
+        ></span
+      ></label>
+      <span style="font-size: 13px">Active</span>
+      <label class="switch"
+        ><input type="checkbox" name="isTopSale" [(ngModel)]="isTopSale" /><span
+          class="switch-track"
+        ></span
+      ></label>
+      <span style="font-size: 13px">Top sale</span>
+      <label class="switch"
+        ><input type="checkbox" name="isNewArrival" [(ngModel)]="isNewArrival" /><span
+          class="switch-track"
+        ></span
+      ></label>
+      <span style="font-size: 13px">New arrival</span>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-block" style="margin-top: 18px">
+      {{ editing ? 'Save changes' : 'Add product' }}
+    </button>
+  </form>
+</div>

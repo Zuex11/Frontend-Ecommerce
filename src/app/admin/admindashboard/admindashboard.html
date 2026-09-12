@@ -1,0 +1,16 @@
+<main class="wrap page-body">
+  <h1 style="font-size: 22px; margin-bottom: 24px">Dashboard</h1>
+
+  @if (myReport) {
+  <div class="stat-grid">
+    <app-stat-card label="Monthly revenue" [value]="'LE ' + myReport.monthRevenue" />
+    <app-stat-card label="Pending orders" [value]="myReport.pendingOrders" />
+    <app-stat-card label="Testimonials to review" [value]="myReport.pendingTestimonials" />
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px">
+    <app-ranked-list title="Top 5 selling products" [items]="myTopProducts" />
+    <app-ranked-list title="Top 5 customers" [items]="myTopCustomers" />
+  </div>
+  }
+</main>

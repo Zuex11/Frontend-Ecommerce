@@ -1,0 +1,16 @@
+<tr>
+  <td>#{{ order._id }}</td>
+      <td>{{ customerName }}</td>
+  <td class="text-muted">{{ order.orderedAt | date: 'MMM d, y' }}</td>
+  <td>LE {{ order.totalPrice }}</td>
+  <td>
+    <select
+      style="width: auto; padding: 6px 10px; font-size: 12px"
+      (change)="onStatusChange($event)"
+    >
+      @for (status of statusOptions; track status) {
+      <option [value]="status" [selected]="status === order.status">{{ status }}</option>
+      }
+    </select>
+  </td>
+</tr>

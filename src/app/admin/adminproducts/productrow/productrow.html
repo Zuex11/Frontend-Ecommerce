@@ -1,0 +1,39 @@
+<tr>
+  <td>{{ product.name }}</td>
+  <td class="text-muted">{{ product.categoryId.name }}</td>
+  <td>LE {{ product.price }}</td>
+  <td [class.text-pink]="product.stock <= 3">{{ product.stock }}</td>
+  <td>
+    <label class="switch"
+      ><input type="checkbox" [checked]="product.isActive" (change)="onToggle('isActive')" /><span
+        class="switch-track"
+      ></span
+    ></label>
+  </td>
+  <td>
+    <label class="switch"
+      ><input type="checkbox" [checked]="product.isTopSale" (change)="onToggle('isTopSale')" /><span
+        class="switch-track"
+      ></span
+    ></label>
+  </td>
+  <td>
+    <label class="switch"
+      ><input
+        type="checkbox"
+        [checked]="product.isNewArrival"
+        (change)="onToggle('isNewArrival')"
+      /><span class="switch-track"></span
+    ></label>
+  </td>
+  <td>
+    <button
+      type="button"
+      class="text-cyan"
+      style="font-size: 12px; background: none; border: none; cursor: pointer"
+      (click)="onEdit()"
+    >
+      Edit
+    </button>
+  </td>
+</tr>

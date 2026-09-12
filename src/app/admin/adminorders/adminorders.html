@@ -1,0 +1,41 @@
+<main class="wrap page-body">
+  <h1 style="font-size: 22px; margin-bottom: 24px">Orders</h1>
+
+  <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px">
+    <label class="text-muted" style="font-size: 13px">Customer</label>
+    <select
+      style="width: auto; padding: 8px 12px; font-size: 13px"
+      (change)="onUserFilterChange($event)"
+    >
+      <option value="">All customers</option>
+      @for (user of users; track user._id) {
+      <option [value]="user._id">{{ user.firstName }} {{ user.lastName }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Order</th>
+          <th>Customer</th>
+          <th>Date</th>
+          <th>Total</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (order of myOrders; track order._id) {
+        <app-order-row [order]="order" (statusChange)="onStatusChange($event)" />
+        }
+      </tbody>
+    </table>
+  </div>
+
+  @if (myOrders.length === 0) {
+  <div class="empty-state">
+    <h3>{{ selectedUserId ? 'No orders for this customer' : 'No orders yet' }}</h3>
+  </div>
+  }
+</main>

@@ -1,0 +1,140 @@
+<main class="wrap page-body">
+  <h1 style="font-size: 22px; margin-bottom: 24px">Categories &amp; Subcategories</h1>
+
+  <div class="card" style="margin-bottom: 32px">
+    <div class="account-section-title">
+      <h2>Categories</h2>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Slug</th>
+          <th>Active</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (category of activeCategories(); track category._id) {
+        <tr>
+          <td>{{ category.name }}</td>
+          <td class="text-muted">{{ category.slug }}</td>
+          <td>
+            <label class="switch"
+              ><input
+                type="checkbox"
+                [checked]="category.isActive"
+                (change)="onCategoryToggle(category)"
+              /><span class="switch-track"></span
+            ></label>
+          </td>
+          <td style="text-align: right">
+            <button type="button" class="btn btn-sm btn-danger" (click)="deleteCategory(category)">
+              Delete
+            </button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+
+    <form #categoryForm="ngForm" (ngSubmit)="addCategory(categoryForm)" style="margin-top: 20px">
+      <h3 style="font-size: 14px; margin-bottom: 16px">Add category</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="catName">Name</label>
+          <input type="text" id="catName" name="name" [(ngModel)]="newCategory.name" required placeholder="Men" />
+        </div>
+        <div class="form-group">
+          <label for="catSlug">Slug</label>
+          <input type="text" id="catSlug" name="slug" [(ngModel)]="newCategory.slug" required placeholder="men" />
+        </div>
+      </div>
+      @if (categoryMessage) {
+      <p class="text-muted" style="margin-bottom: 12px">{{ categoryMessage }}</p>
+      }
+      @if (categoryError) {
+      <p class="auth-error">{{ categoryError }}</p>
+      }
+      <button type="submit" class="btn btn-primary btn-sm" [disabled]="categoryForm.invalid">
+        Add category
+      </button>
+    </form>
+  </div>
+
+  <div class="card">
+    <div class="account-section-title">
+      <h2>Subcategories</h2>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Slug</th>
+          <th>Active</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (subcategory of activeSubcategories(); track subcategory._id) {
+        <tr>
+          <td>{{ subcategory.name }}</td>
+          <td>{{ categoryName(subcategory.categoryId) }}</td>
+          <td class="text-muted">{{ subcategory.slug }}</td>
+          <td>
+            <label class="switch"
+              ><input
+                type="checkbox"
+                [checked]="subcategory.isActive"
+                (change)="onSubcategoryToggle(subcategory)"
+              /><span class="switch-track"></span
+            ></label>
+          </td>
+          <td style="text-align: right">
+            <button
+              type="button"
+              class="btn btn-sm btn-danger"
+              (click)="deleteSubcategory(subcategory)"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+
+    <form #subcategoryForm="ngForm" (ngSubmit)="addSubcategory(subcategoryForm)" style="margin-top: 20px">
+      <h3 style="font-size: 14px; margin-bottom: 16px">Add subcategory</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="subName">Name</label>
+          <input type="text" id="subName" name="name" [(ngModel)]="newSubcategory.name" required placeholder="T-shirts" />
+        </div>
+        <div class="form-group">
+          <label for="subSlug">Slug</label>
+          <input type="text" id="subSlug" name="slug" [(ngModel)]="newSubcategory.slug" required placeholder="t-shirts" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="subCategory">Category</label>
+        <select id="subCategory" name="categoryId" [(ngModel)]="newSubcategory.categoryId" required>
+          <option value="" disabled>Select category</option>
+          @for (category of activeCategories(); track category._id) {
+          <option [value]="category._id">{{ category.name }}</option>
+          }
+        </select>
+      </div>
+      @if (subcategoryMessage) {
+      <p class="text-muted" style="margin-bottom: 12px">{{ subcategoryMessage }}</p>
+      }
+      @if (subcategoryError) {
+      <p class="auth-error">{{ subcategoryError }}</p>
+      }
+      <button type="submit" class="btn btn-primary btn-sm" [disabled]="subcategoryForm.invalid">
+        Add subcategory
+      </button>
+    </form>
+  </div>
+</main>

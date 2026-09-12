@@ -1,0 +1,26 @@
+<main class="wrap page-body">
+  <h1 style="font-size: 22px; margin-bottom: 24px">Testimonials to review</h1>
+
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Author</th>
+          <th>Testimonial</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (testimonial of myPending; track testimonial._id) {
+        <app-testimonial-row [testimonial]="testimonial" (approve)="onApprove($event)" />
+        }
+      </tbody>
+    </table>
+  </div>
+
+  @if (myPending.length === 0) {
+  <div class="empty-state">
+    <h3>No pending testimonials</h3>
+  </div>
+  }
+</main>
